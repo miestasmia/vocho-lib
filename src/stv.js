@@ -15,17 +15,17 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 
 	// Validate the tie breaker
 	if (typeof tieBreaker !== 'undefined') {
+		if (new Set(tieBreaker).size !== tieBreaker.length) {
+			const err = new Error('Duplicate candidates in tie breaker');
+			err.type = 'INVALID_TIE_BREAKER';
+			throw err;
+		}
+		if (tieBreaker.length !== candidates.length) {
+			const err = new Error('Tie breaker vote must contain all candidates');
+			err.type = 'INVALID_TIE_BREAKER';
+			throw err;
+		}
 		for (let pref of tieBreaker) {
-			if (new Set(tieBreaker).size !== tieBreaker.length) {
-				const err = new Error('Duplicate candidates in tie breaker');
-				err.type = 'INVALID_TIE_BREAKER';
-				throw err;
-			}
-			if (tieBreaker.length !== candidates.length) {
-				const err = new Error('Tie breaker vote must contain all candidates');
-				err.type = 'INVALID_TIE_BREAKER';
-				throw err;
-			}
 			if (!candidates.includes(pref)) {
 				const err = new Error(`Invalid candidate ${pref} in tie breaker`);
 				err.type = 'INVALID_TIE_BREAKER';
