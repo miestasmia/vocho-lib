@@ -204,7 +204,7 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 				// If there is still equality, a tie breaker is needed, whose least preferred of the relevant candidates is to be eliminated
 
 				let priorityNum = -1;
-				while (minVotesCands.length > 1 && priorityNum < candidates.length) {
+				while (priorityNum < candidates.length) {
 					priorityNum++;
 
 					let numPriorities = Number.MAX_SAFE_INTEGER;
