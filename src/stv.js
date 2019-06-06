@@ -105,7 +105,7 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 	}
 
 	let round = 0;
-	while (electedCandidates.length < places && round < 6) { // TODO: Remove round limit
+	while (electedCandidates.length < places) {
 		util.debug(`\nRound ${round + 1}:`);
 		round++;
 
