@@ -340,10 +340,10 @@ function RankedPairs (candidates, ballots, ignoredCandidates = [], tieBreaker) {
 					if (typeof nextPair === 'undefined' || nextPair.or > pair.or) {
 						newOrderedTieBreakerPairs.push(pair.eqI);
 					}
-					newOrderedTieBreakerPairs.sort((a, b) => b - a); // Don't mess up the indices when splicing
-					for (let i of newOrderedTieBreakerPairs) {
-						orderedEntries.push(equalPairs.splice(i, 1)[0]);
-					}
+				}
+				newOrderedTieBreakerPairs.sort((a, b) => b - a); // Don't mess up the indices when splicing
+				for (let i of newOrderedTieBreakerPairs) {
+					orderedEntries.push(equalPairs.splice(i, 1)[0]);
 				}
 			}
 
