@@ -154,6 +154,7 @@ function RankedPairs (candidates, ballots, ignoredCandidates = [], tieBreaker) {
 	}
 
 	// Disqualify candidates as needed
+	const disqualifiedCandidates = [];
 	for (let [cand, stats] of Object.entries(candStats)) {
 		const isIgnored = ignoredCandidates.includes(cand);
 		const hasInsufficientMentions = stats.mentions < ballots.length / 2;
@@ -172,6 +173,7 @@ function RankedPairs (candidates, ballots, ignoredCandidates = [], tieBreaker) {
 		if (isIgnored) {
 			util.debug(`${cand} is ignored in this election`);
 		} else if (hasInsufficientMentions) {
+			disqualifiedCandidates.push(cand);
 			util.debug(`${cand} is disqualified due to insufficient mentions`);
 		}
 	}
@@ -385,7 +387,8 @@ function RankedPairs (candidates, ballots, ignoredCandidates = [], tieBreaker) {
 	return {
 		ballots: ballots.length,
 		blankBallots: blankBallots,
-		winner: winner
+		winner: winner,
+		disqualifiedCandidates: disqualifiedCandidates
 	};
 }
 
