@@ -359,6 +359,7 @@ function RankedPairs (candidates, ballots, ignoredCandidates = [], tieBreaker) {
 	for (let cand of candidates) {
 		lock[cand] = [];
 	}
+	const lockEntries = [];
 
 	util.debug('\nLock');
 	for (let entry of orderedEntries) {
@@ -366,11 +367,13 @@ function RankedPairs (candidates, ballots, ignoredCandidates = [], tieBreaker) {
 		const from = pair.winner;
 		const to = pair.loser;
 
-		const newLock = {...lock};
-		newLock[from].push(to);
-		if (isCyclic(newLock)) { continue; }
-		lock = newLock;
+		lock[from].push(to);
+		if (isCyclic(lock)) {
+			lock[from].pop();
+			continue;
+		}
 
+		lockEntries.push([ from, to ]);
 		util.debug(`${from} → ${to}`);
 	}
 
@@ -388,7 +391,12 @@ function RankedPairs (candidates, ballots, ignoredCandidates = [], tieBreaker) {
 		ballots: ballots.length,
 		blankBallots: blankBallots,
 		winner: winner,
-		disqualifiedCandidates: disqualifiedCandidates
+		disqualifiedCandidates: disqualifiedCandidates,
+		compPairs: pairs,
+		rankedPairs: orderedEntries,
+		candStats: candStats,
+		lock: lockEntries,
+		graph: lock
 	};
 }
 

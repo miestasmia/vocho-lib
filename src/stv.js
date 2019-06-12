@@ -104,10 +104,16 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 		candidateVotes[firstPref]++;
 	}
 
+	const roundStats = [];
 	let round = 0;
 	while (electedCandidates.length < places) {
 		util.debug(`\nRound ${round + 1}:`);
 		round++;
+		const roundStat = {
+			elected: [],
+			eliminated: null
+		};
+		roundStats.push(roundStat);
 
 		util.debug(`Valid candidates: ${candidates.join(', ')}`);
 
@@ -120,6 +126,7 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 		}
 		util.debug(votesDebug.join(', '));
 		electedCandidates.push(...exceedsQuota);
+		roundStat.elected.push(...exceedsQuota);
 
 		util.debug('Ballots:');
 		util.debug(weightedBallots);
@@ -127,8 +134,10 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 		// § 3.7: Check if the amount of remaining candidates is equal to the amount of remaining places, and if so elect all remaining candidates
 		if (places - electedCandidates.length === candidates.length) {
 			// Elect all remaining candidates
-			electedCandidates.push(...candidates);
-			util.debug(`Elected all remaining candidates: ${candidates.join(', ')}`);
+			const justElected = candidates.filter(c => !electedCandidates.includes(c));
+			electedCandidates.push(...justElected);
+			roundStat.elected.push(...justElected);
+			util.debug(`Elected all remaining candidates: ${justElected.join(', ')}`);
 			break;
 		}
 		
@@ -268,6 +277,7 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 			// Remove eliminated candidates from the array of candidates
 			candidates.splice(candidates.indexOf(eliminatedCand), 1);
 			delete candidateVotes[eliminatedCand];
+			roundStat.eliminated = eliminatedCand;
 
 			// Remove all mentions of the candidate from ballots
 			for (let ballot of weightedBallots) {
@@ -286,7 +296,9 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 	return {
 		ballots: ballots.length,
 		blankBallots: blankBallots,
-		winners: electedCandidates
+		winners: electedCandidates,
+		rounds: roundStats,
+		quota: quota
 	};
 }
 
