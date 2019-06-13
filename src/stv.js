@@ -111,7 +111,8 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 		round++;
 		const roundStat = {
 			elected: [],
-			eliminated: null
+			eliminated: null,
+			votes: {}
 		};
 		roundStats.push(roundStat);
 
@@ -121,6 +122,7 @@ function STV (places, candidates, ballots, ignoredCandidates = [], tieBreaker) {
 		const exceedsQuota = [];
 		util.debug('Votes for each candidate:');
 		for (let [cand, votes] of Object.entries(candidateVotes)) {
+			roundStat.votes[cand] = votes;
 			votesDebug.push(`${cand}: ${votes}`);
 			if (votes > quota) { exceedsQuota.push(cand); }
 		}
