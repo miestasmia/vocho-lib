@@ -124,7 +124,16 @@ function RankedPairs (candidates, ballots, ignoredCandidates = [], tieBreaker) {
 				}
 				alreadyMentioned.push(curCol);
 				candStats[curCol].mentions++;
+			}
+		}
 
+		// Consider candidates not mentioned as lesser than those mentioned
+		rows.push(candidates.filter(x => alreadyMentioned.includes(x)));
+
+		for (let y = 0; y < rows.length; y++) {
+			const curRow = rows[y];
+
+			for (let curCol of curRow) {
 				for (let i = y + 1; i < rows.length; i++) {
 					const lesserRow = rows[i];
 
