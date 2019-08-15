@@ -128,7 +128,7 @@ function RankedPairs (candidates, ballots, ignoredCandidates = [], tieBreaker) {
 		}
 
 		// Consider candidates not mentioned as lesser than those mentioned
-		rows.push(candidates.filter(x => alreadyMentioned.includes(x)));
+		rows.push(candidates.filter(x => !alreadyMentioned.includes(x)));
 
 		for (let y = 0; y < rows.length; y++) {
 			const curRow = rows[y];
